@@ -1,0 +1,4 @@
+{
+    "mongoURI" : "mongodb+srv://kj:1234@mycluster-ck7a9.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtToken": "MarshallMathers"
+}
