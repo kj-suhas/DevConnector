@@ -8,7 +8,7 @@ const config = require('config');
 const { check, validationResult } = require('express-validator');
 
 // @route GET api/profile/me
-// @desc Get current users profile
+// @desc Get current users profile 
 // @access Private
 router.get('/me', auth, async (req, res) => {
 	try {
@@ -17,8 +17,10 @@ router.get('/me', auth, async (req, res) => {
 		if (!profile) {
 			return res.status(400).json({ msg: 'Theres no profile for this user' });
 		}
+		res.json(profile);
+
 	} catch (err) {
-		console.log(err.message);
+		console.error(err.message);
 		res.status(500).send('Server Error');
 	}
 });
@@ -129,7 +131,7 @@ router.get('/users/:user_id', async (req, res) => {
 		if (err.kind == 'ObjectId') {
 			return res.status(400).json({ msg: 'Profile not found' });
 		}
-		res.status(500).send('Server Errror');
+		res.status(500).send('Server Error');
 	}
 });
 
