@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 const request = require('request');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
@@ -67,10 +68,10 @@ router.post(
 		if (status) profileFields.status = status;
 		if (githubusername) profileFields.githubusername = githubusername;
 		if (skills) {
-			profileFields.skills = skills.split(',').map((skill) => skill.trim());
+			profileFields.skills = skills.split(',').map(skill => skill.trim());
 		}
 
-		// build social objct
+		// build social object
 		profileFields.social = {};
 		if (youtube) profileFields.social.youtube = youtube;
 		if (facebook) profileFields.social.facebook = facebook;
@@ -141,9 +142,9 @@ router.get('/users/:user_id', async (req, res) => {
 
 router.delete('/', auth, async (req, res) => {
 	try {
-		//@todo - remove users posts
+		//Remove users post
+		await Post.deleteMany({ user: req.user.id});
 		// remove profile
-
 		await Profile.findOneAndRemove({ user: req.user.id });
 		// Remove user
 		await User.findOneAndRemove({ _id: req.user.id });
@@ -233,7 +234,8 @@ router.put(
 		[
 			check('school', 'School is required').not().isEmpty(),
 			check('degree', 'Degree is required').not().isEmpty(),
-			check('fieldofstudy', 'Field of study is required').not().isEmpty()
+			check('fieldofstudy', 'Field of study is required').not().isEmpty(),
+			check('from', 'From date is required').not().isEmpty()
 		]
 	],
 	async (req, res) => {
@@ -272,7 +274,29 @@ router.put(
 // @route DELETE api/profile/education/:edu_id
 // @desc Delete education from the profile
 // @access Private
+router.delete('/education/:edu_id', auth, async (req, res) => {
+	try {
+		const profile = await Profile.findOne({ user: req.user.id });
 
+		// Get the remove index
+		const index = profile.education.map((item) => item.id).indexOf(req.params.exp_id);
+
+		profile.education.splice(index, 1);
+
+		await profile.save();
+		res.json(profile);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
+});
+
+
+
+
+// @route DELETE api/profile/github/:username
+// @desc Get user repos from github
+// @access Public
 router.get('/github/:username', (req, res) => {
 	try {
 		const options = {
