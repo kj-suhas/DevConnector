@@ -1,5 +1,4 @@
 const express = require('express');
-const config = require('config');
 const path = require('path');
 
 const connectDB = require('./config/db');
