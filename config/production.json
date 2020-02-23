@@ -1,5 +1,5 @@
 {
-	"mongoURI": "mongodb+srv://kj:1234@mycluster-ck7a9.mongodb.net/test?retryWrites=true&w=majority",
+	"mongoURI": "mongodb+srv://kjsuhas:123@mycluster-ck7a9.mongodb.net/test?retryWrites=true&w=majority",
 	"jwtToken": "MarshallMathers",
 	"githubClientId": "f2743b862c40685ead15",
 	"githubSecret": "4f747b62d59fca9689056447897ae815b459a8ca"
